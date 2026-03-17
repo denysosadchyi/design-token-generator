@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Token Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="token-generator.css">
+</head>
+<body>
+
+<div class="page">
+
+  <div class="masthead">
+    <div class="masthead-left">
+      <h1>Design Token Generator</h1>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="control-card" id="card-brand">
+      <div class="control-label">Brand color · Accent</div>
+      <div class="control-row">
+        <div class="color-well" id="well-brand">
+          <div class="color-well-preview" id="preview-brand" style="background:#13D16A"></div>
+          <input type="color" id="cp-brand" value="#13D16A">
+        </div>
+        <div>
+          <input type="text" class="hex-input" id="hex-brand" value="#13D16A" maxlength="7" spellcheck="false">
+          <div class="a11y-bar" id="a11y-brand"></div>
+        </div>
+      </div>
+    </div>
+    <div class="control-card" id="card-neutral">
+      <div class="control-label">Neutral · Dark base</div>
+      <div class="control-row">
+        <div class="color-well" id="well-neutral">
+          <div class="color-well-preview" id="preview-neutral" style="background:#17181D"></div>
+          <input type="color" id="cp-neutral" value="#17181D">
+        </div>
+        <div>
+          <input type="text" class="hex-input" id="hex-neutral" value="#17181D" maxlength="7" spellcheck="false">
+          <div class="a11y-bar" id="a11y-neutral"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TWO-COLUMN LAYOUT -->
+  <div class="layout">
+
+    <!-- LEFT: TOKENS -->
+    <div>
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('visual',this)">Visual</button>
+        <button class="tab-btn" onclick="showTab('preview',this)">Preview</button>
+        <button class="tab-btn" onclick="showTab('css',this)">CSS</button>
+        <button class="tab-btn" onclick="showTab('json',this)">JSON</button>
+      </div>
+
+      <!-- TAB: VISUAL -->
+      <div id="tab-visual">
+        <div class="section">
+          <div class="section-heading">Brand scale</div>
+          <div class="scale-bar" id="brand-scale"></div>
+        </div>
+        <div class="section">
+          <div class="section-heading">Neutral scale</div>
+          <div class="scale-bar" id="neutral-scale"></div>
+        </div>
+        <div class="section">
+          <div class="section-heading">Additional palette (hue shifts)</div>
+          <div class="scale-bar" id="additional-scale"></div>
+        </div>
+        <div class="section">
+          <div class="section-heading">Surface & Background</div>
+          <div class="token-grid" id="surface-tokens"></div>
+        </div>
+        <div class="section">
+          <div class="section-heading">Text</div>
+          <div class="token-grid" id="text-tokens"></div>
+        </div>
+        <div class="section">
+          <div class="section-heading">States</div>
+          <div class="token-grid" id="state-tokens"></div>
+        </div>
+        <div class="section">
+          <div class="section-heading">Buttons</div>
+          <div class="token-grid" id="button-tokens"></div>
+        </div>
+        <div class="section">
+          <div class="section-heading">Borders & Shadows</div>
+          <div class="token-grid" id="border-tokens"></div>
+        </div>
+      </div>
+
+      <!-- TAB: PREVIEW -->
+      <div id="tab-preview" style="display:none">
+        <div class="preview-grid" id="preview-cards"></div>
+      </div>
+
+      <!-- TAB: CSS -->
+      <div id="tab-css" style="display:none">
+        <div class="output-wrap">
+          <button class="snippet-copy-btn" onclick="copyCSSOutput()" title="Copy CSS">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" stroke-width="1.4"/></svg>
+            Copy
+          </button>
+          <div class="css-output" id="css-out"></div>
+        </div>
+      </div>
+
+      <!-- TAB: JSON -->
+      <div id="tab-json" style="display:none">
+        <div class="output-wrap">
+          <button class="snippet-copy-btn" onclick="copyJSONOutput()" title="Copy JSON">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" stroke-width="1.4"/></svg>
+            Copy
+          </button>
+          <div class="json-output" id="json-out"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: FIGMA SCRIPTER PANEL -->
+    <div class="figma-panel">
+      <div class="figma-panel-body">
+        <div class="figma-panel-top">
+          <svg class="figma-logo" viewBox="0 0 38 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 28.5C19 25.9804 20.0009 23.5641 21.7825 21.7825C23.5641 20.0009 25.9804 19 28.5 19C31.0196 19 33.4359 20.0009 35.2175 21.7825C36.9991 23.5641 38 25.9804 38 28.5C38 31.0196 36.9991 33.4359 35.2175 35.2175C33.4359 36.9991 31.0196 38 28.5 38C25.9804 38 23.5641 36.9991 21.7825 35.2175C20.0009 33.4359 19 31.0196 19 28.5Z" fill="#1ABCFE"/>
+            <path d="M0 47.5C0 44.9804 1.00089 42.5641 2.78249 40.7825C4.56408 39.0009 6.98044 38 9.5 38H19V47.5C19 50.0196 17.9991 52.4359 16.2175 54.2175C14.4359 55.9991 12.0196 57 9.5 57C6.98044 57 4.56408 55.9991 2.78249 54.2175C1.00089 52.4359 0 50.0196 0 47.5Z" fill="#0ACF83"/>
+            <path d="M19 0V19H28.5C31.0196 19 33.4359 17.9991 35.2175 16.2175C36.9991 14.4359 38 12.0196 38 9.5C38 6.98044 36.9991 4.56408 35.2175 2.78249C33.4359 1.00089 31.0196 0 28.5 0H19Z" fill="#FF7262"/>
+            <path d="M0 9.5C0 12.0196 1.00089 14.4359 2.78249 16.2175C4.56408 17.9991 6.98044 19 9.5 19H19V0H9.5C6.98044 0 4.56408 1.00089 2.78249 2.78249C1.00089 4.56408 0 6.98044 0 9.5Z" fill="#F24E1E"/>
+            <path d="M0 28.5C0 31.0196 1.00089 33.4359 2.78249 35.2175C4.56408 36.9991 6.98044 38 9.5 38H19V19H9.5C6.98044 19 4.56408 20.0009 2.78249 21.7825C1.00089 23.5641 0 25.9804 0 28.5Z" fill="#A259FF"/>
+          </svg>
+          <div>
+            <div class="figma-panel-title">Figma Scripter</div>
+            <div class="figma-panel-desc">The script will create a «Design Tokens» Variables collection with all tokens via the Figma Variables API.</div>
+          </div>
+        </div>
+        <div class="figma-steps">
+          <div class="figma-step"><span class="figma-step-n">1</span>Install the <b>Scripter</b> plugin</div>
+          <div class="figma-step"><span class="figma-step-n">2</span>Copy the script below</div>
+          <div class="figma-step"><span class="figma-step-n">3</span>Paste into Scripter → Run</div>
+        </div>
+        <button class="figma-copy-btn" onclick="copyFigmaScript()">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" stroke-width="1.4"/></svg>
+          Copy script
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /layout -->
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="token-generator.js"></script>
+</body>
+</html>
