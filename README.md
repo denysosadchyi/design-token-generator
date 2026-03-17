@@ -2,7 +2,7 @@
 
 Generate a full design token palette from two colors — brand and neutral. Export to CSS, JSON, or Figma Variables in one click.
 
-![Design Token Generator](https://github.com/denysosadchyi/design-token-generator/raw/main/preview.png)
+<img width="1051" height="1004" alt="image" src="https://github.com/user-attachments/assets/18430308-1384-4152-92b1-8ed631f830e0" />
 
 ## What it does
 
